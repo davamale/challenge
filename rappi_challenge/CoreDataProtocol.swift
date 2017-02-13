@@ -41,35 +41,26 @@ public protocol ManagedObjectMethods: class {
      
      - Parameter objects: key value pair to store.
      
-     - Return generic type <Object: NSManagedObject>
+     - Returns: generic type <Object: NSManagedObject>
      */
     static func save(object: NSDictionary?) -> ModelObject?
     
     /**
      Fetch all objects for the Entity type and returns them.
      
-     - Returns [Entity]? an optional array of Entity objects
+     - Returns: [Entity]? an optional array of Entity objects
      */
     static func fetchAll<Entity: NSManagedObject>() -> [Entity]?
     
     /**
      Fetch objects by identifier
      
-     - Parameter
-     value: to be fetched
-     key is the variable that should hold the value
+     - Parameter value: to be fetched.
+     - Parameter key: is the variable that should hold the value.
      
-     
-     - Returns [Entity]? an optional array of Entity objects
+     - Returns: Entity? optional Entity objects
      */
-    static func fetch<Entity: NSManagedObject>(value: String, forKey key: String) -> [Entity]?
-    
-    /**
- 
-     */
-    func remove<Object: NSManagedObject>(object: Object)
-    //    static func remove(object: ModelObject)
-    //    static func fetch(options: Predicate?) -> [ModelObject]?
+    static func fetch<Entity: NSManagedObject>(uniqueValue value: String, forKey key: String) -> Entity?
 }
 
 //MARK: ManagedObjectMethods Default Implementation
@@ -86,7 +77,7 @@ extension ManagedObjectMethods where Self: ManagedObjectType {
         return  fetchedObjects
     }
     
-    public static func fetch<Entity: NSManagedObject>(value: String, forKey key: String) -> [Entity]? {
+    public static func fetch<Entity: NSManagedObject>(uniqueValue value: String, forKey key: String) -> Entity? {
         let cdStack = CoreDataStack.shared
         
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
@@ -95,44 +86,11 @@ extension ManagedObjectMethods where Self: ManagedObjectType {
         let fetchResult = (try? cdStack.context.fetch(request)) as? [Entity]
         
         if let results = fetchResult {
-            if !results.isEmpty {
-                return results
+            if !results.isEmpty && results.count > 0 {
+                return results[0]
             }
         }
         return nil
-    }
-    
-    // default implementation
-    //    func fetch<T: NSManagedObject where T: ManagedObjectType>(options options: [String: String]?) -> [T]? {
-    //        let cdStack = CoreDataStack.defaultStack
-    //
-    //        guard let options = options, let propertyToFetch = options.keys.first else {
-    //            return nil
-    //        }
-    //
-    //        let request = NSFetchRequest(entityName: T.entity.rawValue)
-    //        request.predicate = NSPredicate(format: "%K == %@", propertyToFetch, options[propertyToFetch]!)
-    //
-    //        let fetchResult = (try? cdStack.managedObjectContext.executeFetchRequest(request)) as? [T]
-    //
-    //        if let results = fetchResult where results.count > 0 {
-    //            return results
-    //        }
-    //
-    //        return nil
-    //    }
-    
-    
-    
-    
-    public func remove<Object: NSManagedObject>(object: Object) {
-//        if let objects = fetch(options:nil) {
-//            let cdStack = CoreDataStack.defaultStack
-//
-//            for object in objects {
-//                cdStack.managedObjectContext.deleteObject(object)
-//            }
-//        }
     }
 }
 

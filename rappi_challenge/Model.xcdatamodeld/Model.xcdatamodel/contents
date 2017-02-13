@@ -2,12 +2,13 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16D32" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="App" representedClassName="App" syncable="YES" codeGenerationType="class">
         <attribute name="creator" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="link" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
-        <attribute name="price" attributeType="String" syncable="YES"/>
+        <attribute name="price" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="stringUrlImage" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="stringUrlThumbnail" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="summary" attributeType="String" syncable="YES"/>
+        <attribute name="summary" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="apps" inverseEntity="Category" syncable="YES"/>
     </entity>
     <entity name="Category" representedClassName="Category" syncable="YES" codeGenerationType="class">
@@ -16,7 +17,7 @@
         <relationship name="apps" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="App" inverseName="category" inverseEntity="App" syncable="YES"/>
     </entity>
     <elements>
-        <element name="App" positionX="-63" positionY="-18" width="128" height="165"/>
+        <element name="App" positionX="-63" positionY="-18" width="128" height="180"/>
         <element name="Category" positionX="-54" positionY="54" width="128" height="90"/>
     </elements>
 </model>

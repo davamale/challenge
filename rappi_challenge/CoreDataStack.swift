@@ -54,4 +54,15 @@ class CoreDataStack {
         }
     }
     
+    func save() {
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch let error as NSError {
+                print("Ops there was an error \(error.localizedDescription)")
+                abort()
+            }
+        }
+    }
+    
 }

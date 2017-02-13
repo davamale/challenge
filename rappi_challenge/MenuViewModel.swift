@@ -66,6 +66,8 @@ final class MenuViewModel: NSObject {
             let _ = App.save(object: entry)
         }
         
+        CoreDataStack.shared.save()
+        
         categories = Category.fetchAll()
         delegate.shouldReloadCollectionView()
     }

@@ -26,28 +26,23 @@ extension App: ManagedObjectType {
 //MARK: ManagedObjectMethods Protocol
 extension App: ManagedObjectMethods {
 
-    public static func fetch(categoryWithId id: String) -> Category? {
-        return nil
-    }
-
-    
     public typealias ModelObject = App
     
     public static func save(object: NSDictionary?) -> ModelObject? {
         
-        guard let object = object else {
+        guard let object = object, let imName = object["im:name"] as? JSON, let name = imName["label"] as? String, let idObject = object["id"] as? JSON, let attr = idObject["attributes"] as? JSON, let id = attr["im:id"] as? String else {
             return nil
         }
         
-        
-        guard let app = NSEntityDescription.insertNewObject(forEntityName: self.entityName, into: CoreDataStack.shared.context) as? App else {
-            return nil
+        // if app already exists, return
+        if let app = fetch(uniqueValue: id, forKey: "id") as? App {
+            return app
         }
         
-        // unwrap category name
-        if let imName = object["im:name"] as? JSON, let name = imName["label"] as? String {
-            app.name = name
-        }
+        let app: App = CoreDataStack.shared.context.insertObject()
+        
+        app.name = name
+        app.id = id
         
         if let imageArray = object["im:image"] as? [JSON], imageArray.count > 0 {
             

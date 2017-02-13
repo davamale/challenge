@@ -21,7 +21,7 @@ extension MenuCell {
     func animate(inCollectionView collectionView: UICollectionView, toLocation: CGPoint, withCompletion completion:((Bool) -> Void)? = nil) {
         
         // get indexpath
-        guard let indexPath = collectionView.indexPath(for: self), let superview = collectionView.superview else {
+        guard let indexPath = collectionView.indexPath(for: self), let superview = collectionView.superview, let window = UIApplication.shared.keyWindow else {
             return
         }
         
@@ -40,14 +40,15 @@ extension MenuCell {
         layerView.backgroundColor = .black
         layerView.alpha = 0.6
         
-        superview.addSubview(layerView)
-        superview.addSubview(cellSnapShot)
+        window.addSubview(layerView)
+        window.addSubview(cellSnapShot)
         
         // performs animation
-        UIView.animate(withDuration: 0.8, animations: { 
+        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: .allowAnimatedContent, animations: {
             cellSnapShot.frame.origin = toLocation
         }) { (finished) in
             layerView.removeFromSuperview()
+            cellSnapShot.removeFromSuperview()
             completion?(finished)
         }
     }
@@ -74,7 +75,7 @@ extension MenuCell {
         let frameOnSuperView = collectionView.convert(attributesFrame!, to: superview)
         
         // creates cell snapshot
-        let cellSnapShot = categoryNameLabel.snapshotView(afterScreenUpdates: false)!
+        let cellSnapShot = categoryNameLabel.snapshotView(afterScreenUpdates: true)!
         cellSnapShot.frame = frameOnSuperView
         
         // creates layer view to be on the background while animating
@@ -86,7 +87,7 @@ extension MenuCell {
         window.addSubview(cellSnapShot)
         
         // performs animation
-        UIView.animate(withDuration: 0.8, animations: {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: .allowAnimatedContent, animations: {
             cellSnapShot.frame.origin = toLocation
         }) { (finished) in
             layerView.removeFromSuperview()

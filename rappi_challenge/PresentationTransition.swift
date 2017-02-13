@@ -22,20 +22,13 @@ extension PresentationTransition: UIViewControllerAnimatedTransitioning {
         
         let fromViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)!
         let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to)!
-        let bounds = UIScreen.main.bounds
         let containerView = transitionContext.containerView
-        let width = bounds.width * (3/4)
         let finalFrameForVC = fromViewController.view.frame
-        
-        guard let toNav = toViewController as? UINavigationController, let toTopViewController = toNav.topViewController, let toView = toTopViewController.view else {
-            return
-        }
         
         toViewController.view.alpha = 0.0
         
         // will start with a height of 0
-        toViewController.view.frame = CGRect(x: 0, y: 0, width: width, height: 0)
-        toView.layer.cornerRadius = 8.0
+        toViewController.view.frame = CGRect(x: finalFrameForVC.origin.x, y: finalFrameForVC.origin.y, width: finalFrameForVC.width, height: 0)
         
         containerView.addSubview(toViewController.view)
         
@@ -52,4 +45,9 @@ extension PresentationTransition: UIViewControllerAnimatedTransitioning {
     }
     
 }
+
+
+
+
+
 

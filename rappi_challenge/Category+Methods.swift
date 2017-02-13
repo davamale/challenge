@@ -40,8 +40,8 @@ extension Category: ManagedObjectMethods {
         }
         
         // if the category already exists, returns it
-        if let fetchedCategory: [Category] = fetch(value: id, forKey: "name"), fetchedCategory.count > 0 {
-            return fetchedCategory[0]
+        if let fetchedCategory: Category = fetch(uniqueValue: id, forKey: "name") {
+            return fetchedCategory
         }
         
         // creates new Category

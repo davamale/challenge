@@ -98,14 +98,16 @@ class MenuVC: UIViewController {
      Handle view transition to the app list for the selected category.
      */
     fileprivate func transitionToAppsList(forCategory category: Category) {
-        self.transitioningDelegate = self
-        self.modalPresentationStyle = .custom
         
         guard let navController = UIStoryboard.app.instantiateInitialViewController() as? UINavigationController, let appViewController = navController.topViewController as? AppsVC else {
             return
         }
         
+        navController.transitioningDelegate = self
+        navController.modalPresentationStyle = .custom
+        
         appViewController.navigationItem.title = category.name
+        appViewController.category = category
         
         present(navController, animated: true, completion: nil)
     }
@@ -118,6 +120,7 @@ extension MenuVC: MenuViewModelDelegate {
     }
 }
 
+//MARK: UIViewControllerTransitioning Delegate
 extension MenuVC: UIViewControllerTransitioningDelegate {
     
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
@@ -169,7 +172,6 @@ extension MenuVC: UICollectionViewDelegate {
         originalCell.animateLabel(inCollectionView: collectionView, toLocation: CGPoint(x: (view.frame.width/2) - (originalCell.frame.width/2), y: (64/2) - (originalCell.frame.height/2)), withCompletion: { (finished) in
             
             if finished {
-                self.navigationItem.title = originalCell.categoryNameLabel.text
                 self.transitionToAppsList(forCategory: originalCell.category)
             }
         })
